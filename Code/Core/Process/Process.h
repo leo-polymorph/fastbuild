@@ -33,7 +33,7 @@ public:
     // NOTE: Owner must free the returned memory!
     bool ReadAllData( AString & memOut,
                       AString & errOut,
-                      uint32_t timeOutMS = 0 );
+                      uint32_t timeOutMS = 0, void* userdata = nullptr, void (*onNewLine)(void*, const AString&) = nullptr);
 
     #if defined( __WINDOWS__ )
         // Prevent handles being redirected

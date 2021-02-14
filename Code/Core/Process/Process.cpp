@@ -747,7 +747,7 @@ void Process::Detach()
 //------------------------------------------------------------------------------
 bool Process::ReadAllData( AString & outMem,
                            AString & errMem,
-                           uint32_t timeOutMS )
+                           uint32_t timeOutMS, void* userdata, void (*onNewLine)(void*, const AString&) )
 {
     const Timer t;
 
@@ -769,6 +769,32 @@ bool Process::ReadAllData( AString & outMem,
         Read( m_StdOutRead, outMem );
         Read( m_StdErrRead, errMem );
 #endif
+
+        if (onNewLine != nullptr && prevOutSize != outMem.GetLength())
+        {
+            uint32_t i = prevOutSize;
+
+            while (i < outMem.GetLength())
+            {
+                uint32_t j = i;
+
+                while (j < outMem.GetLength() && outMem.Get()[j] != '\r' && outMem.Get()[j] != '\n')
+                {
+                    ++j;
+                }
+
+                if (j > i + 1)
+                {
+                    //printf("%.*s\n", j - i, outMem.Get() + i);
+                    onNewLine(userdata, AString(outMem.Get() + i, outMem.Get() + j));
+                }
+
+                i = j + 1;
+            }
+
+            //printf("%s", outMem.Get() + prevOutSize);
+            //printf("%d %d\n", outMem.Get()[outSize - 2], outMem.Get()[outSize - 1]);
+        }
 
         // did we get some data?
         if ( ( prevOutSize != outMem.GetLength() ) || ( prevErrSize != errMem.GetLength() ) )

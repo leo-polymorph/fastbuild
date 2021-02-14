@@ -172,6 +172,12 @@ ExecNode::~ExecNode()
     return Node::DetermineNeedToBuildStatic();
 }
 
+void printOut(void* userData, const AString& line)
+{
+    Job* job = (Job*)userData;
+    Node::DumpOutput( job, line);
+}
+
 // DoBuild
 //------------------------------------------------------------------------------
 /*virtual*/ Node::BuildResult ExecNode::DoBuild( Job * job )
@@ -208,7 +214,7 @@ ExecNode::~ExecNode()
     // capture all of the stdout and stderr
     AString memOut;
     AString memErr;
-    p.ReadAllData( memOut, memErr );
+    p.ReadAllData( memOut, memErr, 0, job, &printOut );
 
     // Get result
     const int result = p.WaitForExit();
@@ -223,7 +229,7 @@ ExecNode::~ExecNode()
         m_ExecAlwaysShowOutput ||
         FBuild::Get().GetOptions().m_ShowCommandOutput )
     {
-        Node::DumpOutput( job, memOut );
+        //Node::DumpOutput( job, memOut );
         Node::DumpOutput( job, memErr );
     }
 

@@ -581,6 +581,8 @@ bool Process::ReadAllData( AString & outMem,
     #endif
 
     bool processExited = false;
+    uint32_t lastPrintedChar = 0;
+
     for ( ;; )
     {
         const bool mainAbort = ( m_MainAbortFlag && AtomicLoadRelaxed( m_MainAbortFlag ) );
@@ -595,12 +597,13 @@ bool Process::ReadAllData( AString & outMem,
 
         const uint32_t prevOutSize = outMem.GetLength();
         const uint32_t prevErrSize = errMem.GetLength();
+
         Read( m_StdOutRead, outMem );
         Read( m_StdErrRead, errMem );
 
-        if (onNewLine != nullptr && prevOutSize != outMem.GetLength())
+        if (onNewLine != nullptr && lastPrintedChar != outMem.GetLength())
         {
-            uint32_t i = prevOutSize;
+            uint32_t i = lastPrintedChar;
 
             while (i < outMem.GetLength())
             {
@@ -611,10 +614,11 @@ bool Process::ReadAllData( AString & outMem,
                     ++j;
                 }
 
-                if (j > i + 1)
+                if (j > i + 1 && (outMem.Get()[j] == '\r' || outMem.Get()[j] == '\n'))
                 {
                     //printf("%.*s\n", j - i, outMem.Get() + i);
                     onNewLine(userdata, AString(outMem.Get() + i, outMem.Get() + j));
+                    lastPrintedChar = j;
                 }
 
                 i = j + 1;
@@ -692,6 +696,11 @@ bool Process::ReadAllData( AString & outMem,
         }
 
         break; // all done
+    }
+
+    if (onNewLine != nullptr && lastPrintedChar != outMem.GetLength())
+    {
+        onNewLine(userdata, AString(outMem.Get() + lastPrintedChar, outMem.Get() + outMem.GetLength()));
     }
 
     return true;

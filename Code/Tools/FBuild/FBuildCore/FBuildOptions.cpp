@@ -101,6 +101,12 @@ FBuildOptions::OptionsResult FBuildOptions::ProcessCommandLine( int argc, char *
             continue;
         }
 
+        // Don't validate args for WSL forwarding
+        if ( m_WrapperMode == WRAPPER_MODE_WINDOWS_SUBSYSTEM_FOR_LINUX )
+        {
+            continue;
+        }
+
         // options start with a '-'
         if ( thisArg.BeginsWith( '-' ) )
         {

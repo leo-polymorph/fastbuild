@@ -20,6 +20,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #if defined( __WINDOWS__ ) && defined( DEBUG )
     #include "Core/Env/WindowsHeader.h" // for OutputDebugStringA
 #endif
@@ -366,7 +367,7 @@ static FileStream * g_MonitorFileStream = nullptr;
     }
 
     // print output and then progress
-    if ( threadIndex > 0 )
+    if ( threadIndex > 0 && strstr(message, "): error:") == nullptr && strstr(message, "): warning:") == nullptr )
     {
         char buffer[ 8 ];
         _itoa_s( (int32_t)threadIndex, buffer, 8, 10 );

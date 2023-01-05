@@ -537,9 +537,13 @@ void ProjectGeneratorBase::AddConfig( const ProjectGeneratorBaseConfig & config 
                                                       Array<AString> & outDefines,
                                                       bool escapeQuotes )
 {
+    // replace '\"' with '""' (default cmd quote escape)
+    AString compilerArgsCpy(compilerArgs);
+    compilerArgsCpy.Replace("\\\"", "\"\"");
+
     // Extract various kinds of includes
     const bool keepFullOption = false;
-    ExtractIntellisenseOptions( compilerArgs,
+    ExtractIntellisenseOptions( compilerArgsCpy,
                                 g_ProjectGeneratorBaseConstants.m_DefinePrefixes,
                                 outDefines,
                                 escapeQuotes,
@@ -631,6 +635,9 @@ void ProjectGeneratorBase::AddConfig( const ProjectGeneratorBaseConfig & config 
         // Did we find something?
         if ( optionBody.IsEmpty() == false )
         {
+            // Un-escaped quotes
+            optionBody.Replace("\"\"", "\"");
+
             if ( escapeQuotes )
             {
                 optionBody.Replace( "\"", "\\\"" );

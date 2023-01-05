@@ -456,9 +456,13 @@ void ProjectGeneratorBase::AddConfig( const ProjectGeneratorBaseConfig & config 
     prefixes.EmplaceBack( "/D" );
     prefixes.EmplaceBack( "-D" );
 
+    // replace '\"' with '""' (default cmd quote escape)
+    AString compilerArgsCpy(compilerArgs);
+    compilerArgsCpy.Replace("\\\"", "\"\"");
+
     // Extract various kinds of includes
     const bool keepFullOption = false;
-    ExtractIntellisenseOptions( compilerArgs, prefixes, outDefines, escapeQuotes, keepFullOption );
+    ExtractIntellisenseOptions( compilerArgsCpy, prefixes, outDefines, escapeQuotes, keepFullOption );
 }
 
 // ExtractAdditionalOptions
@@ -549,6 +553,9 @@ void ProjectGeneratorBase::AddConfig( const ProjectGeneratorBaseConfig & config 
         // Did we find something?
         if ( optionBody.IsEmpty() == false )
         {
+            // Un-escaped quotes
+            optionBody.Replace("\"\"", "\"");
+
             if ( escapeQuotes )
             {
                 optionBody.Replace( "\"", "\\\"" );

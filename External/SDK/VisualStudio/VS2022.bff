@@ -9,11 +9,11 @@
 //  3) Part of a Visual Studio installation (Program Files)
 //
 
-#if file_exists( "2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe" )
+#if file_exists( "2022/Professional/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe" )
     //
     // Use vendorized toolchain - v17.14.16
     //
-    .VS2022_BasePath        = '$_CURRENT_BFF_DIR_$/2022/Community/VC'
+    .VS2022_BasePath        = '$_CURRENT_BFF_DIR_$/2022/Professional/VC'
     .VS2022_Version         = '14.44.35207'
     .VS2022_MSC_VER         = '1944'
     #define MSVC_DYNAMIC_DEOPT_AVAILABLE
@@ -31,9 +31,9 @@
         //
         // Use Visual Studio installation
         //
-        #if file_exists( "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe" )
+        #if file_exists( "C:/Program Files/Microsoft Visual Studio/2022/Professional/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe" )
             // v17.14.9
-            .VS2022_BasePath        = 'C:/Program Files/Microsoft Visual Studio/2022/Community/VC'
+            .VS2022_BasePath        = 'C:/Program Files/Microsoft Visual Studio/2022/Professional/VC'
             .VS2022_Version         = '14.44.35207'
             .VS2022_MSC_VER         = '1944'
             #define MSVC_DYNAMIC_DEOPT_AVAILABLE

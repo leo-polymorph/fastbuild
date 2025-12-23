@@ -34,6 +34,7 @@ def get_clang_format_exe():
     potential_locations = [
                             '..\\External\\SDK\\Clang\\Windows\\20.1.0\\bin\\clang-format.exe',
                             'C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\Llvm\\bin\\clang-format.exe',
+                            'C:\\Program Files\\Microsoft Visual Studio\\2022\\Professional\\VC\\Tools\\Llvm\\bin\\clang-format.exe',
                             'C:\\Program Files\\Microsoft Visual Studio\\2022\\Enterprise\\VC\\Tools\\Llvm\\bin\\clang-format.exe',
                             'C:\\Program Files\\LLVM\\bin\\clang-format.exe',
                             '/usr/bin/clang-format',
